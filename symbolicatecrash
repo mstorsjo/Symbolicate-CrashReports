@@ -596,6 +596,19 @@ sub parse_images {
             %captures = ( 'base' => \$1, 'extent' => \$2, 'plus' => \$3,
             'bundlename' => \$4, 'uuid' => \$5, 'path' => \$6);
         }
+        elsif($report_version == 11 || $report_version == 12) {
+            # 0x7fff323f4000 -     0x7fff32895fef  com.apple.CoreFoundation (6.9 - 1452.23) <945E5C0A-86C5-336E-A64F-5BF06E78985A> /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+            $pat = '
+                ^\s* (\w+) \s* \- \s* (\w+) \s*     (?# the range base and extent [1,2] )
+                (\+)?                               (?# the application may have a + in front of the name [3] )
+                (.+)                                (?# bundle name [4] )
+                \s+ \(.+\) \s*                      (?# the versions )
+                \<?([[:xdigit:]-]{36})?\>?          (?# possible UUID [6] )
+                \s* (\/.*)\s*$                      (?# first fwdslash to end we hope is path [6] )
+                ';
+            %captures = ( 'base' => \$1, 'extent' => \$2, 'plus' => \$3,
+            'bundlename' => \$4, 'uuid' => \$5, 'path' => \$6);
+        }
         elsif($report_version == 104 || $report_version == 105) { # Kirkwood
             # 0x182155000 - 0x1824c6fff CoreFoundation arm64  <f0d21c6db8d83cf3a0c4712fd6e69a8e> /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation
             $pat = '
