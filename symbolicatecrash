@@ -802,7 +802,7 @@ sub parse_backtrace {
                 (\S.*?) \s+                # bundle [1]
                 (                          # description to replace [2]
                     (0x\w+) \s+            # address [3]
-                    0x\w+ \s+              # library address
+                    .+ \s+                 # library address or partially symbolicated function name
                     (?: \+ \s+ (\d+))?     # offset [4], optional
                     .*                     # remainder of description
                 )                          # end of capture
